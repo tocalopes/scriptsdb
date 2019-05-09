@@ -1,4 +1,4 @@
-CREATE DATABASE bayerchallenge;
+CREATE DATABASE IF NOT EXISTS bayerchallenge;
 USE bayerchallenge;
 
 CREATE TABLE PONTUACOES (
@@ -8,6 +8,7 @@ CREATE TABLE PONTUACOES (
   PRIMARY KEY (pontuacao_id)
 );
 
-INSERT INTO PONTUACOES(pontuacao_alcancada, pontuacao_maxima) VALUES(49, 50);
-INSERT INTO PONTUACOES(pontuacao_alcancada, pontuacao_maxima) VALUES(50, 50);
-INSERT INTO PONTUACOES(pontuacao_alcancada, pontuacao_maxima) VALUES(15, 50);
+-- Testes de inserção no banco
+--INSERT INTO PONTUACOES(pontuacao_alcancada, pontuacao_maxima) VALUES(49, 50);
+--INSERT INTO PONTUACOES(pontuacao_alcancada, pontuacao_maxima) VALUES(50, 50);
+--INSERT INTO PONTUACOES(pontuacao_alcancada, pontuacao_maxima) VALUES(15, 50);
