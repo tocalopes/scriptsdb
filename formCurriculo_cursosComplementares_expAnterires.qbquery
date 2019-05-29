@@ -1,0 +1,40 @@
+﻿DROP TABLE IF EXISTS `bayerchallenge`.`cursos_complementares`;
+CREATE TABLE  `bayerchallenge`.`cursos_complementares` (
+  `ccp_codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `ccp_curso` varchar(45) NOT NULL,
+  `ccp_instituicao` varchar(45) NOT NULL,
+  `ccp_inicio` date NOT NULL,
+  `ccp_duracao` int(10) unsigned NOT NULL,
+  `ccp_cursando` tinyint(1) NOT NULL,
+  `ccp_descricao` mediumtext,
+  PRIMARY KEY (`ccp_codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `bayerchallengechallenge`.`experiencias_anteriores`;
+CREATE TABLE  `bayerchallenge`.`experiencias_anteriores` (
+  `exp_codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `exp_cargo` varchar(45) NOT NULL,
+  `exp_empresa` varchar(45) NOT NULL DEFAULT '',
+  `exp_atual` tinyint(1) NOT NULL DEFAULT '0',
+  `exp_entrada` date NOT NULL DEFAULT '0000-00-00',
+  `exp_saida` date DEFAULT NULL,
+  `exp_atividades` mediumtext NOT NULL,
+  `exp_salario` float NOT NULL DEFAULT '0',
+  PRIMARY KEY (`exp_codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `bayerchallenge`.`formulario_curriculo`;
+CREATE TABLE  `bayerchallenge`.`formulario_curriculo` (
+  `cur_codigo` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `cur_idade` int(3) unsigned NOT NULL,
+  `cur_email` varchar(100) NOT NULL,
+  `cur_telefone` varchar(20) NOT NULL,
+  `cur_celular` varchar(20) NOT NULL,
+  `cur_endereco` varchar(200) NOT NULL,
+  `cur_idiomas` varchar(100) NOT NULL DEFAULT '',
+  `ccp_codigo` int(10) unsigned DEFAULT NULL,
+  `obj_codigo` int(10) unsigned NOT NULL DEFAULT '0',
+  `exp_codigo` int(10) unsigned NOT NULL DEFAULT '0',
+  `cur_salario` float NOT NULL DEFAULT '0',
+  PRIMARY KEY (`cur_codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
