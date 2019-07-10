@@ -1,6 +1,9 @@
+CREATE DATABASE IF NOT EXISTS bayerchallenge;
+USE bayerchallenge;
+
 CREATE TABLE `curriculos`
 (
-  `curriculos_id` int PRIMARY KEY NOT NULL,
+  `curriculos_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `curso_extra_id` int,
   `experiencia_id` int,
   `formacao_id` int,
@@ -12,7 +15,7 @@ CREATE TABLE `curriculos`
 
 CREATE TABLE `formacoes`
 (
-  `formacao_id` int PRIMARY KEY NOT NULL,
+  `formacao_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `campus_id` int,
   `curso` varchar(50) NOT NULL,
   `data_inicio` date NOT NULL,
@@ -23,35 +26,35 @@ CREATE TABLE `formacoes`
 
 CREATE TABLE `instituicoes`
 (
-  `instituicao_id` int PRIMARY KEY NOT NULL,
+  `instituicao_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) NOT NULL,
   `tipo` varchar(50) NOT NULL
 );
 
 CREATE TABLE `localidades`
 (
-  `localidade_id` int PRIMARY KEY NOT NULL,
+  `localidade_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `cidade` varchar(50) NOT NULL,
   `pais` varchar(50) NOT NULL
 );
 
 CREATE TABLE `campus`
 (
-  `campus_id` int PRIMARY KEY NOT NULL,
+  `campus_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `instituicao_id` int,
   `localidade_id` int
 );
 
 CREATE TABLE `idiomas`
 (
-  `idioma_id` int PRIMARY KEY NOT NULL,
+  `idioma_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `idioma` varchar(50) NOT NULL,
   `proficiencia_id` int
 );
 
 CREATE TABLE `proficiencias`
 (
-  `proficiencia_id` int PRIMARY KEY NOT NULL,
+  `proficiencia_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nivel_fala` varchar(50) NOT NULL,
   `nivel_leitura` varchar(50) NOT NULL,
   `nivel_escrita` varchar(50) NOT NULL
@@ -59,7 +62,7 @@ CREATE TABLE `proficiencias`
 
 CREATE TABLE `enderecos`
 (
-  `endereco_id` int PRIMARY KEY NOT NULL,
+  `endereco_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `cep` varchar(50) NOT NULL,
   `rua_e_numero` varchar(80) NOT NULL,
   `cidade` varchar(50) NOT NULL,
@@ -70,7 +73,7 @@ CREATE TABLE `enderecos`
 
 CREATE TABLE `experiencias`
 (
-  `experiencia_id` int PRIMARY KEY NOT NULL,
+  `experiencia_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `cargo` varchar(45) NOT NULL,
   `empresa` varchar(45) NOT NULL,
   `atual` tinyint(1) DEFAULT null,
@@ -80,7 +83,7 @@ CREATE TABLE `experiencias`
 
 CREATE TABLE `cursos_extras`
 (
-  `curso_extra_id` int(10) PRIMARY KEY NOT NULL,
+  `curso_extra_id` int(10) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nome` varchar(45) NOT NULL,
   `instituicao` varchar(45) NOT NULL,
   `inicio` date NOT NULL,
@@ -106,4 +109,3 @@ ALTER TABLE `enderecos` ADD FOREIGN KEY (`endereco_id`) REFERENCES `curriculos` 
 ALTER TABLE `experiencias` ADD FOREIGN KEY (`experiencia_id`) REFERENCES `curriculos` (`experiencia_id`);
 
 ALTER TABLE `cursos_extras` ADD FOREIGN KEY (`curso_extra_id`) REFERENCES `curriculos` (`curso_extra_id`);
-
