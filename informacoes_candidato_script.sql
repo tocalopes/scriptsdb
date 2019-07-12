@@ -92,20 +92,20 @@ CREATE TABLE `cursos_extras`
   `descricao` mediumtext
 );
 
-ALTER TABLE `formacoes` ADD FOREIGN KEY (`formacao_id`) REFERENCES `curriculos` (`formacao_id`);
+ALTER TABLE `curriculos` ADD FOREIGN KEY (`formacao_id`) REFERENCES `formacoes` (`formacao_id`);
 
 ALTER TABLE `campus` ADD FOREIGN KEY (`instituicao_id`) REFERENCES `instituicoes` (`instituicao_id`);
 
 ALTER TABLE `campus` ADD FOREIGN KEY (`localidade_id`) REFERENCES `localidades` (`localidade_id`);
 
-ALTER TABLE `campus` ADD FOREIGN KEY (`campus_id`) REFERENCES `formacoes` (`campus_id`);
+ALTER TABLE `formacoes` ADD FOREIGN KEY (`campus_id`) REFERENCES `campus` (`campus_id`);
 
-ALTER TABLE `idiomas` ADD FOREIGN KEY (`idioma_id`) REFERENCES `curriculos` (`idioma_id`);
+ALTER TABLE `curriculos` ADD FOREIGN KEY (`idioma_id`) REFERENCES `idiomas` (`idioma_id`);
 
-ALTER TABLE `proficiencias` ADD FOREIGN KEY (`proficiencia_id`) REFERENCES `idiomas` (`proficiencia_id`);
+ALTER TABLE `idiomas` ADD FOREIGN KEY (`proficiencia_id`) REFERENCES `proficiencias` (`proficiencia_id`);
 
-ALTER TABLE `enderecos` ADD FOREIGN KEY (`endereco_id`) REFERENCES `curriculos` (`endereco_id`);
+ALTER TABLE `curriculos` ADD FOREIGN KEY (`endereco_id`) REFERENCES `enderecos` (`endereco_id`);
 
-ALTER TABLE `experiencias` ADD FOREIGN KEY (`experiencia_id`) REFERENCES `curriculos` (`experiencia_id`);
+ALTER TABLE `curriculos` ADD FOREIGN KEY (`experiencia_id`) REFERENCES `experiencias` (`experiencia_id`);
 
-ALTER TABLE `cursos_extras` ADD FOREIGN KEY (`curso_extra_id`) REFERENCES `curriculos` (`curso_extra_id`);
+ALTER TABLE `curriculos` ADD FOREIGN KEY (`curso_extra_id`) REFERENCES `cursos_extras` (`curso_extra_id`);
