@@ -24,20 +24,6 @@ CREATE TABLE `formacao`
   `media` float
 );
 
-CREATE TABLE `instituicao`
-(
-  `instituicao_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `nome` varchar(50) NOT NULL,
-  `tipo` varchar(50) NOT NULL
-);
-
-CREATE TABLE `localidade`
-(
-  `localidade_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `cidade` varchar(50) NOT NULL,
-  `estado` varchar(50) NOT NULL
-);
-
 CREATE TABLE `idioma`
 (
   `idioma_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
