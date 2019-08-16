@@ -16,7 +16,7 @@ CREATE TABLE `curriculo`
 CREATE TABLE `formacao`
 (
   `formacao_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `campus_id` int,
+  `instituicao` varchar(50),
   `curso` varchar(50) NOT NULL,
   `data_inicio` date NOT NULL,
   `data_termino` date NOT NULL,
@@ -36,13 +36,6 @@ CREATE TABLE `localidade`
   `localidade_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `cidade` varchar(50) NOT NULL,
   `estado` varchar(50) NOT NULL
-);
-
-CREATE TABLE `campus`
-(
-  `campus_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `instituicao_id` int,
-  `localidade_id` int
 );
 
 CREATE TABLE `idioma`
@@ -93,12 +86,6 @@ CREATE TABLE `curso_extra`
 );
 
 ALTER TABLE `curriculo` ADD FOREIGN KEY (`formacao_id`) REFERENCES `formacao` (`formacao_id`);
-
-ALTER TABLE `campus` ADD FOREIGN KEY (`instituicao_id`) REFERENCES `instituicao` (`instituicao_id`);
-
-ALTER TABLE `campus` ADD FOREIGN KEY (`localidade_id`) REFERENCES `localidade` (`localidade_id`);
-
-ALTER TABLE `formacao` ADD FOREIGN KEY (`campus_id`) REFERENCES `campus` (`campus_id`);
 
 ALTER TABLE `curriculo` ADD FOREIGN KEY (`idioma_id`) REFERENCES `idioma` (`idioma_id`);
 
