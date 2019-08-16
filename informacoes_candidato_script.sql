@@ -1,9 +1,9 @@
 CREATE DATABASE IF NOT EXISTS bayerchallenge;
 USE bayerchallenge;
 
-CREATE TABLE `curriculos`
+CREATE TABLE `curriculo`
 (
-  `curriculos_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  `curriculo_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `curso_extra_id` int,
   `experiencia_id` int,
   `formacao_id` int,
@@ -13,7 +13,7 @@ CREATE TABLE `curriculos`
   `created_at` timestamp DEFAULT 'now()'
 );
 
-CREATE TABLE `formacoes`
+CREATE TABLE `formacao`
 (
   `formacao_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `campus_id` int,
@@ -24,14 +24,14 @@ CREATE TABLE `formacoes`
   `media` float
 );
 
-CREATE TABLE `instituicoes`
+CREATE TABLE `instituicao`
 (
   `instituicao_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) NOT NULL,
   `tipo` varchar(50) NOT NULL
 );
 
-CREATE TABLE `localidades`
+CREATE TABLE `localidade`
 (
   `localidade_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `cidade` varchar(50) NOT NULL,
@@ -45,14 +45,14 @@ CREATE TABLE `campus`
   `localidade_id` int
 );
 
-CREATE TABLE `idiomas`
+CREATE TABLE `idioma`
 (
   `idioma_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `idioma` varchar(50) NOT NULL,
   `proficiencia_id` int
 );
 
-CREATE TABLE `proficiencias`
+CREATE TABLE `proficiencia`
 (
   `proficiencia_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nivel_fala` varchar(50) NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE `proficiencias`
   `nivel_escrita` varchar(50) NOT NULL
 );
 
-CREATE TABLE `enderecos`
+CREATE TABLE `endereco`
 (
   `endereco_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `cep` varchar(50) NOT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE `enderecos`
   `realocar` boolean
 );
 
-CREATE TABLE `experiencias`
+CREATE TABLE `experiencia`
 (
   `experiencia_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `cargo` varchar(45) NOT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE `experiencias`
   `saida` datetime DEFAULT NULL
 );
 
-CREATE TABLE `cursos_extras`
+CREATE TABLE `curso_extra`
 (
   `curso_extra_id` int(10) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nome` varchar(45) NOT NULL,
@@ -92,20 +92,20 @@ CREATE TABLE `cursos_extras`
   `descricao` mediumtext
 );
 
-ALTER TABLE `curriculos` ADD FOREIGN KEY (`formacao_id`) REFERENCES `formacoes` (`formacao_id`);
+ALTER TABLE `curriculo` ADD FOREIGN KEY (`formacao_id`) REFERENCES `formacao` (`formacao_id`);
 
-ALTER TABLE `campus` ADD FOREIGN KEY (`instituicao_id`) REFERENCES `instituicoes` (`instituicao_id`);
+ALTER TABLE `campus` ADD FOREIGN KEY (`instituicao_id`) REFERENCES `instituicao` (`instituicao_id`);
 
-ALTER TABLE `campus` ADD FOREIGN KEY (`localidade_id`) REFERENCES `localidades` (`localidade_id`);
+ALTER TABLE `campus` ADD FOREIGN KEY (`localidade_id`) REFERENCES `localidade` (`localidade_id`);
 
-ALTER TABLE `formacoes` ADD FOREIGN KEY (`campus_id`) REFERENCES `campus` (`campus_id`);
+ALTER TABLE `formacao` ADD FOREIGN KEY (`campus_id`) REFERENCES `campus` (`campus_id`);
 
-ALTER TABLE `curriculos` ADD FOREIGN KEY (`idioma_id`) REFERENCES `idiomas` (`idioma_id`);
+ALTER TABLE `curriculo` ADD FOREIGN KEY (`idioma_id`) REFERENCES `idioma` (`idioma_id`);
 
-ALTER TABLE `idiomas` ADD FOREIGN KEY (`proficiencia_id`) REFERENCES `proficiencias` (`proficiencia_id`);
+ALTER TABLE `idioma` ADD FOREIGN KEY (`proficiencia_id`) REFERENCES `proficiencia` (`proficiencia_id`);
 
-ALTER TABLE `curriculos` ADD FOREIGN KEY (`endereco_id`) REFERENCES `enderecos` (`endereco_id`);
+ALTER TABLE `curriculo` ADD FOREIGN KEY (`endereco_id`) REFERENCES `endereco` (`endereco_id`);
 
-ALTER TABLE `curriculos` ADD FOREIGN KEY (`experiencia_id`) REFERENCES `experiencias` (`experiencia_id`);
+ALTER TABLE `curriculo` ADD FOREIGN KEY (`experiencia_id`) REFERENCES `experiencias` (`experiencia_id`);
 
-ALTER TABLE `curriculos` ADD FOREIGN KEY (`curso_extra_id`) REFERENCES `cursos_extras` (`curso_extra_id`);
+ALTER TABLE `curriculo` ADD FOREIGN KEY (`curso_extra_id`) REFERENCES `cursos_extras` (`curso_extra_id`);
