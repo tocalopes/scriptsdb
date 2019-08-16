@@ -35,7 +35,7 @@ CREATE TABLE `localidade`
 (
   `localidade_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `cidade` varchar(50) NOT NULL,
-  `pais` varchar(50) NOT NULL
+  `estado` varchar(50) NOT NULL
 );
 
 CREATE TABLE `campus`
