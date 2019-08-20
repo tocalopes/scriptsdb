@@ -10,7 +10,7 @@ CREATE TABLE `curriculo`
   `idioma_id` int,
   `endereco_id` int,
   `obj_profissional` varchar(30) NOT NULL,
-  `created_at` timestamp DEFAULT 'now()'
+  `created_at` timestamp DEFAULT NOW()
 );
 
 CREATE TABLE `formacao`
