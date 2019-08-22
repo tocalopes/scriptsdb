@@ -10,11 +10,13 @@ CREATE TABLE `curriculo`
   `idioma_id` int,
   `obj_profissional` varchar(30) NOT NULL,
   `resumo` textarea,
+  `candidato_id` int,
   `created_at` timestamp DEFAULT NOW()
 );
 
 CREATE TABLE `candidato`
 (
+  `candidato_id` int,
   `nome` varchar(30),
   `ìdade` int,
   `endereco_id` int,  
@@ -91,6 +93,8 @@ CREATE TABLE `curso_extra`
 ALTER TABLE `curriculo` ADD FOREIGN KEY (`formacao_id`) REFERENCES `formacao` (`formacao_id`);
 
 ALTER TABLE `curriculo` ADD FOREIGN KEY (`idioma_id`) REFERENCES `idioma` (`idioma_id`);
+
+ALTER TABLE `curriculo` ADD FOREIGN KEY (`candidato_id`) REFERENCES `candidato` (`candidato_id`);
 
 ALTER TABLE `idioma` ADD FOREIGN KEY (`proficiencia_id`) REFERENCES `proficiencia` (`proficiencia_id`);
 
