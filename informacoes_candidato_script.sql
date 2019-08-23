@@ -8,7 +8,8 @@ CREATE TABLE `curriculo`
   `experiencia_id` int,
   `formacao_id` int,
   `idioma_id` int,
-  `obj_profissional` varchar(30) NOT NULL,
+  `objetivo_profissional` varchar(30) NOT NULL,
+  `expectativa_salario` decimal(10,2),
   `resumo` textarea,
   `candidato_id` int,
   `created_at` timestamp DEFAULT NOW()
@@ -42,7 +43,6 @@ CREATE TABLE `idioma`
 (
   `idioma_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `idioma` varchar(50) NOT NULL,
-  `proficiencia_id` int,
   `created_at` timestamp DEFAULT NOW()
 );
 
@@ -55,14 +55,20 @@ CREATE TABLE `proficiencia`
   `created_at` timestamp DEFAULT NOW()
 );
 
+CREATE TABLE `proficiencia_idioma`
+(
+  `proficiencia_id` int NOT NULL,
+  `idioma_id` int NOT NULL,  
+)
+
 CREATE TABLE `endereco`
 (
   `endereco_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `cep` varchar(50) NOT NULL,
-  `rua_e_numero` varchar(80) NOT NULL,
+  `rua` varchar(80) NOT NULL,
+  `numero` int NOT NULL,
   `cidade` varchar(50) NOT NULL,
   `uf` varchar(2) NOT NULL,
-  `pais` varchar(120) NOT NULL,
   `realocar` boolean,
   `created_at` timestamp DEFAULT NOW()
 );
