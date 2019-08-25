@@ -27,15 +27,13 @@ CREATE TABLE `candidato`
   `created_at` timestamp DEFAULT NOW()
 )
 
-CREATE TABLE `formacao`
+CREATE TABLE `formacao_academica`
 (
   `formacao_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `instituicao` varchar(50),
-  `curso` varchar(50) NOT NULL,
-  `data_inicio` date NOT NULL,
-  `data_termino` date NOT NULL,
-  `em_curso` boolean NOT NULL,
-  `media` float,
+  `nome_curso` varchar(50) NOT NULL,
+  `situacao` varchar(45) NOT NULL,
+  `nivel` varchar(45) NOT NULL,
   `created_at` timestamp DEFAULT NOW()
 );
 
@@ -78,20 +76,22 @@ CREATE TABLE `experiencia_anterior`
   `experiencia_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `cargo` varchar(45) NOT NULL,
   `empresa` varchar(45) NOT NULL,
-  `atual` tinyint(1) DEFAULT null,
+  `emprego_atual` tinyint(1) DEFAULT null,
   `entrada` date NOT NULL,
   `saida` datetime DEFAULT NULL,
+  `principais_atividades` mediumtext,
+  `salario` decimal(10,2),
   `created_at` timestamp DEFAULT NOW()
 );
 
-CREATE TABLE `curso_extra`
+CREATE TABLE `curso_extra_curricular`
 (
   `curso_extra_id` int(10) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nome` varchar(45) NOT NULL,
   `instituicao` varchar(45) NOT NULL,
   `inicio` date NOT NULL,
   `duracao` int(10) NOT NULL,
-  `atual` tinyint(1) DEFAULT NULL,
+  `situacao` varchar(45) NOT NULL,
   `descricao` mediumtext,
   `created_at` timestamp DEFAULT NOW()
 );
