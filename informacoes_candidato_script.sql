@@ -99,7 +99,7 @@ CREATE TABLE `curso_extra_curricular`
   `curso_extra_id` int(10) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nome` varchar(45) NOT NULL,
   `instituicao` varchar(45) NOT NULL,
-  `inicio` date NOT NULL,
+  `data_inicial` date NOT NULL,
   `duracao` int(10) NOT NULL,
   `situacao` varchar(45) NOT NULL,
   `descricao` mediumtext,
