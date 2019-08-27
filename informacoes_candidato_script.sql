@@ -1,23 +1,25 @@
 CREATE DATABASE IF NOT EXISTS bayerchallenge;
 USE bayerchallenge;
 
+DROP TABLE IF EXISTS `curriculo`;
 CREATE TABLE `curriculo`
 (
   `curriculo_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  `candidato_id` int,
   `curso_extra_id` int,
   `experiencia_id` int,
   `formacao_id` int,
   `idioma_id` int,
   `objetivo_profissional` varchar(30) NOT NULL,
   `expectativa_salario` decimal(10,2),
-  `resumo` textarea,
-  `candidato_id` int,
+  `resumo` tinytext NOT NULL,
   `created_at` timestamp DEFAULT NOW()
 );
 
+DROP TABLE IF EXISTS `candidato`;
 CREATE TABLE `candidato`
 (
-  `candidato_id` int,
+  `candidato_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `nome` varchar(30),
   `ìdade` int,
   `endereco_id` int,  
@@ -25,8 +27,9 @@ CREATE TABLE `candidato`
   `telefone_residencial` int,
   `telefone_celular` int,
   `created_at` timestamp DEFAULT NOW()
-)
+);
 
+DROP TABLE IF EXISTS `formacao_academica`;
 CREATE TABLE `formacao_academica`
 (
   `formacao_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -37,6 +40,7 @@ CREATE TABLE `formacao_academica`
   `created_at` timestamp DEFAULT NOW()
 );
 
+DROP TABLE IF EXISTS `idioma`;
 CREATE TABLE `idioma`
 (
   `idioma_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -44,6 +48,7 @@ CREATE TABLE `idioma`
   `created_at` timestamp DEFAULT NOW()
 );
 
+DROP TABLE IF EXISTS `proficiencia`;
 CREATE TABLE `proficiencia`
 (
   `proficiencia_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -53,12 +58,15 @@ CREATE TABLE `proficiencia`
   `created_at` timestamp DEFAULT NOW()
 );
 
+DROP TABLE IF EXISTS `proficiencia_idioma`;
 CREATE TABLE `proficiencia_idioma`
 (
   `proficiencia_id` int NOT NULL,
-  `idioma_id` int NOT NULL,  
-)
+  `idioma_id` int NOT NULL,
+  `created_at` timestamp DEFAULT NOW()
+);
 
+DROP TABLE IF EXISTS `endereco`;
 CREATE TABLE `endereco`
 (
   `endereco_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -71,6 +79,7 @@ CREATE TABLE `endereco`
   `created_at` timestamp DEFAULT NOW()
 );
 
+DROP TABLE IF EXISTS `experiencia_anterior`;
 CREATE TABLE `experiencia_anterior`
 (
   `experiencia_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -84,6 +93,7 @@ CREATE TABLE `experiencia_anterior`
   `created_at` timestamp DEFAULT NOW()
 );
 
+DROP TABLE IF EXISTS `curso_extra_curricular`;
 CREATE TABLE `curso_extra_curricular`
 (
   `curso_extra_id` int(10) PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -96,16 +106,14 @@ CREATE TABLE `curso_extra_curricular`
   `created_at` timestamp DEFAULT NOW()
 );
 
-ALTER TABLE `curriculo` ADD FOREIGN KEY (`formacao_id`) REFERENCES `formacao` (`formacao_id`);
+ALTER TABLE `curriculo` ADD FOREIGN KEY (`formacao_id`) REFERENCES `formacao_academica` (`formacao_id`);
 
 ALTER TABLE `curriculo` ADD FOREIGN KEY (`idioma_id`) REFERENCES `idioma` (`idioma_id`);
 
 ALTER TABLE `curriculo` ADD FOREIGN KEY (`candidato_id`) REFERENCES `candidato` (`candidato_id`);
 
-ALTER TABLE `idioma` ADD FOREIGN KEY (`proficiencia_id`) REFERENCES `proficiencia` (`proficiencia_id`);
-
-ALTER TABLE `curriculo` ADD FOREIGN KEY (`endereco_id`) REFERENCES `endereco` (`endereco_id`);
+ALTER TABLE `candidato` ADD FOREIGN KEY (`endereco_id`) REFERENCES `endereco` (`endereco_id`);
 
 ALTER TABLE `curriculo` ADD FOREIGN KEY (`experiencia_id`) REFERENCES `experiencia_anterior` (`experiencia_id`);
 
-ALTER TABLE `curriculo` ADD FOREIGN KEY (`curso_extra_id`) REFERENCES `curso_extra` (`curso_extra_id`);
+ALTER TABLE `curriculo` ADD FOREIGN KEY (`curso_extra_id`) REFERENCES `curso_extra_curricular` (`curso_extra_id`);
