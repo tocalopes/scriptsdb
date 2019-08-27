@@ -100,7 +100,7 @@ CREATE TABLE `curso_extra_curricular`
   `nome` varchar(45) NOT NULL,
   `instituicao` varchar(45) NOT NULL,
   `data_inicial` date NOT NULL,
-  `duracao` int(10) NOT NULL,
+  `duracao` varchar(45) NOT NULL,
   `situacao` varchar(45) NOT NULL,
   `descricao` mediumtext,
   `created_at` timestamp DEFAULT NOW()
