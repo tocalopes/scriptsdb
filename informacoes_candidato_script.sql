@@ -30,7 +30,7 @@ CREATE TABLE `curriculo_experiencia`
 DROP TABLE IF EXISTS `curriculo_formacao`;
 CREATE TABLE `curriculo_formacao`
 (
-  `experiencia_id` int NOT NULL,
+  `curriculo_id` int NOT NULL,
   `formacao_id` int NOT NULL
 );
 
