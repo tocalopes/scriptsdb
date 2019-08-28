@@ -6,15 +6,42 @@ CREATE TABLE `curriculo`
 (
   `curriculo_id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `candidato_id` int,
-  `curso_extra_id` int,
-  `experiencia_id` int,
-  `formacao_id` int,
-  `idioma_id` int,
   `objetivo_profissional` varchar(30) NOT NULL,
   `expectativa_salario` decimal(10,2),
   `resumo` tinytext NOT NULL,
   `created_at` timestamp DEFAULT NOW()
 );
+
+
+DROP TABLE IF EXISTS `curriculo_curso_extracurricular`;
+CREATE TABLE `curriculo_curso_extracurricular`
+(
+  `curso_extracurricular_id` int NOT NULL,
+  `curriculo_id` int NOT NULL
+);
+
+DROP TABLE IF EXISTS `curriculo_experiencia`;
+CREATE TABLE `curriculo_experiencia`
+(
+  `experiencia_id` int NOT NULL,
+  `curriculo_id` int NOT NULL
+);
+
+DROP TABLE IF EXISTS `curriculo_formacao`;
+CREATE TABLE `curriculo_formacao`
+(
+  `experiencia_id` int NOT NULL,
+  `formacao_id` int NOT NULL
+);
+
+
+DROP TABLE IF EXISTS `curriculo_idioma`;
+CREATE TABLE `curriculo_idioma`
+(
+  `idioma_id` int NOT NULL,
+  `curriculo_id` int NOT NULL
+);
+
 
 DROP TABLE IF EXISTS `candidato`;
 CREATE TABLE `candidato`
