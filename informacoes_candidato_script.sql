@@ -51,8 +51,8 @@ CREATE TABLE `candidato`
   `ìdade` int,
   `endereco_id` int,  
   `email` varchar(30),
-  `telefone_residencial` int,
-  `telefone_celular` int,
+  `telefone_residencial` LONG,
+  `telefone_celular` LONG,
   `created_at` timestamp DEFAULT NOW()
 );
 
