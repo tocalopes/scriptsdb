@@ -56,7 +56,7 @@ CREATE TABLE `candidato`
   `candidato_id` int PRIMARY KEY AUTO_INCREMENT,
   `usuario_id` INT NOT NULL UNIQUE,
   `nome` varchar(30),
-  `ìdade` int,
+  `idade` int,
   `endereco_id` int,
   `email` varchar(30),
   `realocar` boolean,
@@ -213,12 +213,15 @@ CREATE TABLE vaga (
     `salario`  DECIMAL(10,2),
     `beneficios` MEDIUMTEXT,
     `endereco_id` INT,
+    `pontuacao_minima` int,
+    `fase_id` int,
     `created_at` timestamp DEFAULT NOW()
 )
 
 CREATE TABLE candidato_vaga(
     `candidato_id` int,
     `vaga_id` int,
+    `pontuacao_alcancada` int,
     PRIMARY KEY (`candidato_id`,`vaga_id`)
 );
 
@@ -236,17 +239,23 @@ CREATE TABLE atividade_desafio(
     `pontos` INT,
     `titulo` VARCHAR(50),
     `descricao` VARCHAR(255),
-    `pontos_candidato_id` INT,
     `minutos_necessarios` INT
 )
 
-CREATE TABLE atividade_candidato(
+CREATE TABLE atividade_resolvida_candidato(
+    `atividade_id` INT,
+    `candidato_id` INT,
+    `resposta_atividade_id` INT,
+    PRIMARY KEY (`candidato_id`, `atividade_id`)
+);
+
+CREATE TABLE atividade_desafio_candidato(
     `pontos_atividade` INT,
     `status_atividade_id` INT,
-    `candidato_id` INT NOT NULL,
-    `atividade_id` INT NOT NULL,
+    `candidato_id` INT,
+    `atividade_desafio_id` INT,
     `desafios_resolvidos` INT,
-    PRIMARY KEY (`candidato_id`,`atividade_id`)
+    PRIMARY KEY (`candidato_id`,`atividade_desafio_id`)
 );
 
 CREATE TABLE status_atividade(
@@ -264,6 +273,7 @@ CREATE TABLE atividade(
 CREATE TABLE resposta_atividade(
     `resposta_atividade_id` INT PRIMARY KEY AUTO_INCREMENT,
     `atividade_id` INT,
+    `correta` TINYINT DEFAULT 0,
     `resposta` varchar(100)
 );
 
@@ -293,13 +303,18 @@ CREATE TABLE desbloqueavel_candidato(
     ALTER TABLE `desbloqueavel_candidato` ADD FOREIGN KEY (`candidato_id`) REFERENCES `candidato` (`candidato_id`);
     ALTER TABLE `desbloqueavel_candidato` ADD FOREIGN KEY (`desbloqueavel_id`) REFERENCES `desbloqueavel` (`desbloqueavel_id`);
 
-    ALTER TABLE `atividade_candidato` ADD FOREIGN KEY  (`status_atividade_id`) REFERENCES `status_atividade` (`status_atividade_id`);
-    ALTER TABLE `atividade_candidato` ADD FOREIGN KEY (`candidato_id`) REFERENCES `candidato` (`candidato_id`);
-    ALTER TABLE `atividade_candidato` ADD FOREIGN KEY (`atividade_id`) REFERENCES `atividade` (`atividade_id`);
+    ALTER TABLE `atividade_resolvida_candidato` ADD FOREIGN KEY (`atividade_id`) REFERENCES `atividade` (`atividade_id`);
+    ALTER TABLE `atividade_resolvida_candidato` ADD FOREIGN KEY (`candidato_id`) REFERENCES `candidato` (`candidato_id`);
+    ALTER TABLE `atividade_resolvida_candidato` ADD FOREIGN KEY (`resposta_atividade_id`) REFERENCES `resposta_atividade` (`resposta_atividade_id`);
+
+    ALTER TABLE `atividade_desafio_candidato` ADD FOREIGN KEY  (`status_atividade_id`) REFERENCES `status_atividade` (`status_atividade_id`);
+    ALTER TABLE `atividade_desafio_candidato` ADD FOREIGN KEY (`candidato_id`) REFERENCES `candidato` (`candidato_id`);
+    ALTER TABLE `atividade_desafio_candidato` ADD FOREIGN KEY (`atividade_desafio_id`) REFERENCES `atividade_desafio` (`atividade_desafio_id`);
 
     ALTER TABLE `categoria_desafio` ADD FOREIGN KEY (`vaga_id`) REFERENCES `vaga`(`vaga_id`);
 
     ALTER TABLE `atividade_desafio` ADD FOREIGN KEY (`categoria_desafio_id`) REFERENCES `categoria_desafio` (`categoria_desafio_id`);
+
 
     ALTER TABLE `atividade` ADD FOREIGN KEY (`atividade_desafio_id`) REFERENCES `atividade_desafio` (`atividade_desafio_id`);
 
@@ -355,35 +370,56 @@ CREATE TABLE desbloqueavel_candidato(
     select * from pontuacao_candidato;
 
     INSERT INTO endereco (`cidade`,`uf`) VALUES ("São Paulo", "SP");
-    # INSERT INTO vaga (`cargo`,`area_atuacao`,`requisitos_desejaveis`,`requisitos_obrigatorios`,
-    #                   `principais_atividades`,`salario`,`beneficios`,`endereco_id`) VALUES ("Desenvolvedor Front-End","Tecnologia","Office Avançado","ECMAScript2015","Desenvolvimento de sistemas de grande escala",5000.00,"Vale Refeição",1);
-    # INSERT INTO vaga (`cargo`,`area_atuacao`,`requisitos_desejaveis`,`requisitos_obrigatorios`,
-    #                   `principais_atividades`,`salario`,`beneficios`,`endereco_id`) VALUES ("Desenvolvedor PHP","Tecnologia","Angular 8","PHP 5 Avançado","Desenvolvimento de sistemas de grande escala",5000.00,"Vale Refeição",1);
+    INSERT INTO vaga (`cargo`,`area_atuacao`,`requisitos_desejaveis`,`requisitos_obrigatorios`,
+                      `principais_atividades`,`salario`,`beneficios`,`endereco_id`) VALUES ("Desenvolvedor Front-End","Tecnologia","Office Avançado","ECMAScript2015","Desenvolvimento de sistemas de grande escala",5000.00,"Vale Refeição",1);
+    INSERT INTO vaga (`cargo`,`area_atuacao`,`requisitos_desejaveis`,`requisitos_obrigatorios`,
+                      `principais_atividades`,`salario`,`beneficios`,`endereco_id`) VALUES ("Desenvolvedor PHP","Tecnologia","Angular 8","PHP 5 Avançado","Desenvolvimento de sistemas de grande escala",5000.00,"Vale Refeição",1);
+#
+#
+    INSERT INTO categoria_desafio (titulo, descricao, vaga_id) VALUES ("Valores Pessoais","questões que tangem além do conhecimento técnico do candidato",1);
+    INSERT INTO categoria_desafio (titulo, descricao, vaga_id) VALUES ("Conhecimentos Específicos","Conhecimentos necessários para sua vaga",1);
+     INSERT INTO atividade_desafio (categoria_desafio_id, pontos, minutos_necessarios, titulo,descricao) VALUES (1,100,30,"Ética", "desenvolvimento e capacidade de atuação portando-se de uma conduta ética.");
+     INSERT INTO atividade_desafio (categoria_desafio_id, pontos, minutos_necessarios, titulo,descricao) VALUES (1,250,40,"Liderança", "Técnicas de liderança em ambientes de extrema diversibilidade.");
+    INSERT INTO atividade_desafio (categoria_desafio_id, pontos, minutos_necessarios, titulo,descricao) VALUES (1,250,40,"Javascript", "Conhecimentos avançados da linguagem e desenvolvimento com frameworks modernos.");
+
+# #
+  INSERT INTO atividade (titulo, descricao, atividade_desafio_id) VALUES ("Arrow Function", "Qual é uma de suas finalidades?",3);
 
 
-#     INSERT INTO candidato_vaga values (1,1);
-#     INSERT INTO categoria_desafio (titulo, descricao, vaga_id) VALUES ("Valores Pessoais","questões que tangem além do conhecimento técnico do candidato",1);
-#     INSERT INTO categoria_desafio (titulo, descricao, vaga_id) VALUES ("Conhecimentos Específicos","Conhecimentos necessários para sua vaga",1);
-#     INSERT INTO atividade_desafio (categoria_desafio_id, pontos, minutos_necessarios, titulo,descricao) VALUES (1,100,30,"Ética", "desenvolvimento e capacidade de atuação portando-se de uma conduta ética.");
-#     INSERT INTO atividade_desafio (categoria_desafio_id, pontos, minutos_necessarios, titulo,descricao) VALUES (1,250,40,"Liderança", "Técnicas de liderança em ambientes de extrema diversibilidade.");
+
 #
-#     INSERT INTO atividade (titulo, descricao, atividade_desafio_id) VALUES ("Ética", "desenvolvimento e capacidade de atuação portando-se de uma conduta ética.",1);
-#     INSERT INTO atividade (titulo, descricao, atividade_desafio_id) VALUES ("Posicionamento", "Qual a melhor forma de se posicionar perante funcionários que estão sem foco em suas atividades?",2);
+  INSERT INTO atividade (titulo, descricao, atividade_desafio_id) VALUES ("Posicionamento", "Qual a melhor forma de se posicionar perante funcionários que estão sem foco em suas atividades?",2);
+INSERT INTO atividade (titulo, descricao, atividade_desafio_id) VALUES ("Moral", "O que significa possuír uma atitude moralmente correta?",1);
+
+INSERT INTO atividade (titulo, descricao, atividade_desafio_id) VALUES ("Promise", "Qual é uma de suas finalidades?",3);#
 #
-#     INSERT INTO atividade_candidato(`pontos_atividade`,`candidato_id`,`atividade_id`,`desafios_resolvidos`) VALUES (40,1,1,2);
+
+INSERT INTO  resposta_atividade (atividade_id, resposta) VALUES (1,"Possuir um contexto léxico");
+INSERT INTO  resposta_atividade (atividade_id, resposta) VALUES (1,"Resolver problemas como Callback Hell");
+INSERT INTO  resposta_atividade (atividade_id, resposta) VALUES (1,"Lidar com requisições assíncronas");
+
+
+INSERT INTO  resposta_atividade (atividade_id, resposta) VALUES (2,"Forçar até eles conseguirem prozuir mais");
+INSERT INTO  resposta_atividade (atividade_id, resposta) VALUES (2,"Permitir um tempo de descanço");
+INSERT INTO  resposta_atividade (atividade_id, resposta) VALUES (2,"Deixar a situação como está");
+
+INSERT INTO resposta_atividade (atividade_id, resposta) VALUES (3,"Possuír uma conduta que vá de acordo com os costumes práticas e não viole outros indivíduos");
+INSERT INTO resposta_atividade (atividade_id, resposta) VALUES (3,"Possuír uma vida com fama e riquezas");
+select * from resposta_atividade;
+delete from resposta_atividade where resposta_atividade_id between 5 and 7;
+
+INSERT INTO  resposta_atividade (atividade_id, resposta) VALUES (4,"Possuir um contexto léxico");
+INSERT INTO  resposta_atividade (atividade_id, resposta) VALUES (4,"Resolver problemas como Callback Hell");
+INSERT INTO  resposta_atividade (atividade_id, resposta) VALUES (4,"Redução de código ao lidar com funções anônimas");
 #
-#     INSERT INTO resposta_atividade (resposta_atividade_id, atividade_id, resposta) VALUES (1, 1, "Nilismo social");
-#     INSERT INTO resposta_atividade (resposta_atividade_id, atividade_id, resposta) VALUES (2, 1, "Aspectos sociais");
-#     INSERT INTO resposta_atividade (resposta_atividade_id, atividade_id, resposta) VALUES (3, 1, "Libertinagem");
-#     INSERT INTO resposta_atividade (resposta_atividade_id, atividade_id, resposta) VALUES (4, 1, "Ordem");
+    SELECT * FROM resposta_atividade;
+#     INSERT INTO resposta_atividade (atividade_id, resposta) VALUES ( 3, "Nilismo social");
+#     INSERT INTO resposta_atividade (atividade_id, resposta) VALUES ( 3, "Aspectos sociais");
+#     INSERT INTO resposta_atividade (atividade_id, resposta) VALUES (3, "Libertinagem");
+#     INSERT INTO resposta_atividade (atividade_id, resposta) VALUES ( 3, "Ordem");
 #
-#     INSERT INTO atividade (titulo, descricao, atividade_desafio_id) VALUES ("Moral", "desenvolvimento e capacidade de atuação portando-se de uma conduta moral.",1);
 #
-#     INSERT INTO resposta_atividade (resposta_atividade_id, atividade_id, resposta) VALUES (5, 3, "Nilismo");
-#     INSERT INTO resposta_atividade (resposta_atividade_id, atividade_id, resposta) VALUES (6, 3, "Empatia com funcionarios");
-#     INSERT INTO resposta_atividade (resposta_atividade_id, atividade_id, resposta) VALUES (7, 3, "Disrupção empresarial");
-#     INSERT INTO resposta_atividade (resposta_atividade_id, atividade_id, resposta) VALUES (8, 3, "Reordenação do convívio");
-#
+#INSERT INTO atividade_desafio_candidato (`pontos_atividade`,`candidato_id`,`atividade_id`,`desafios_resolvidos`) VALUES (40,1,1,2);
 #
 #     select * from atividade_desafio;
 #     SELECT * FROM atividade;
@@ -391,7 +427,7 @@ CREATE TABLE desbloqueavel_candidato(
 
 #     SELECT DISTINCT ad.titulo, ad.descricao, ac.pontos_atividade, ad.pontos, ac.desafios_resolvidos, (select count(a1.atividade_id) from atividade a1 where a1.atividade_desafio_id = a.atividade_desafio_id), ad.minutos_necessarios, ad.atividade_desafio_id FROM atividade_desafio ad LEFT JOIN atividade a ON a.atividade_desafio_id = ad.atividade_desafio_id LEFT JOIN atividade_candidato ac ON ac.atividade_id = a.atividade_id WHERE ad.categoria_desafio_id = 1 ;
 
-#     SELECT * FROM atividade_candidato;
+#     SELECT * FROM atividade_desafio_candidato;
 
 #     SELECT sum(ad.pontos) from atividade_desafio ad;
 #     select * from categoria_desafio;
@@ -407,8 +443,8 @@ CREATE TABLE desbloqueavel_candidato(
     INSERT INTO tipo_desbloqueavel (descricao) VALUES ("tema interativo");
     INSERT INTO desbloqueavel (descricao, pontos_minimos, tipo_desbloqueavel_id, valor) VALUES ("Tema Padrão", 0, 1, "");
     INSERT INTO desbloqueavel (descricao, pontos_minimos, tipo_desbloqueavel_id, valor) VALUES ("Tema Dark", 50, 1, "dark-theme");
-    INSERT INTO desbloqueavel (descricao, pontos_minimos, tipo_desbloqueavel_id, valor) VALUES ("Tema Pink", 150, 1, "pink-theme");
-    INSERT INTO desbloqueavel (descricao, pontos_minimos, tipo_desbloqueavel_id, valor) VALUES ("Tema Futurístico", 250, 1, "futuristic-theme");
+    INSERT INTO desbloqueavel (descricao, pontos_minimos, tipo_desbloqueavel_id, valor) VALUES ("Tema Pink", 150, 2, "pink-theme");
+    INSERT INTO desbloqueavel (descricao, pontos_minimos, tipo_desbloqueavel_id, valor) VALUES ("Tema Futurístico", 250, 2, "futuristic-theme");
     INSERT INTO status_candidato_fase (descricao) VALUES ("concluído");
     INSERT INTO status_candidato_fase (descricao) VALUES ("em processo");
 
@@ -431,8 +467,10 @@ select * from desbloqueavel_candidato;
 SELECT 1, c.desbloqueavel_selecionado FROM candidato c where c.candidato_id = 1;
 
 DELETE FROM desbloqueavel_candidato WHERE candidato_id = 1 AND desbloqueavel_id = 2;
-INSERT INTO desbloqueavel_candidato (desbloqueavel_id,candidato_id) VALUES (2, 1);
-UPDATE candidato SET desbloqueavel_selecionado = {desbloqueavel_id} WHERE candidato_id = {self.candidato_id}
+# INSERT INTO desbloqueavel_candidato (desbloqueavel_id,candidato_id) VALUES (2, 1);
+#  UPDATE candidato SET desbloqueavel_selecionado = {desbloqueavel_id} WHERE candidato_id = {self.candidato_id}
 select * from candidato;
 select * from desbloqueavel_candidato;
+
+SELECT COUNT(cv.candidato_id),(SELECT COUNT(cv2.candidato_id) from candidato_vaga cv2 WHERE cv2.vaga_id = v.vaga_id AND cv2.pontuacao_alcancada > v.pontuacao_minima ), f.descricao, v.created_at FROM vaga v INNER JOIN candidato_vaga cv ON cv.vaga_id = v.vaga_id LEFT JOIN fase f ON f.fase_id = v.fase_id
 # SELECT cd.titulo, cd.descricao, sum(ac.desafios_resolvidos), count(a.atividade_id), sum(ad.pontos) FROM categoria_desafio cd INNER JOIN candidato_vaga cv ON cv.vaga_id = cd.vaga_id  LEFT JOIN atividade_desafio ad on ad.categoria_desafio_id = cd.categoria_desafio_id LEFT JOIN atividade a ON a.atividade_desafio_id = ad.atividade_desafio_id LEFT JOIN atividade_candidato ac ON a.atividade_id = ac.atividade_id WHERE cv.candidato_id = 1 ;
