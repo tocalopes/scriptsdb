@@ -344,7 +344,15 @@ CREATE TABLE desbloqueavel_candidato(
 
     INSERT INTO pontuacao_level(`pontuacao_maxima`, `level`) VALUES (50,0);
     INSERT INTO pontuacao_level(`pontuacao_maxima`, `level`) VALUES (100,1);
-    INSERT INTO pontuacao_level(`pontuacao_maxima`, `level`) VALUES (150,2);
+    INSERT INTO pontuacao_level(`pontuacao_maxima`, `level`) VALUES (300,2);
+    INSERT INTO pontuacao_level(`pontuacao_maxima`, `level`) VALUES (650,3);
+    INSERT INTO pontuacao_level(`pontuacao_maxima`, `level`) VALUES (1300,4);
+    INSERT INTO pontuacao_level(`pontuacao_maxima`, `level`) VALUES (1800,5);
+    INSERT INTO pontuacao_level(`pontuacao_maxima`, `level`) VALUES (2300,6);
+    INSERT INTO pontuacao_level(`pontuacao_maxima`, `level`) VALUES (3000,7);
+    INSERT INTO pontuacao_level(`pontuacao_maxima`, `level`) VALUES (3400,8);
+    INSERT INTO pontuacao_level(`pontuacao_maxima`, `level`) VALUES (4000,9);
+    INSERT INTO pontuacao_level(`pontuacao_maxima`, `level`) VALUES (5000,10);
 
 
     INSERT INTO pontuacao_candidato(`pontuacao_alcancada`,`pontuacao_level_id`) VALUES (72, 2);
@@ -471,6 +479,10 @@ DELETE FROM desbloqueavel_candidato WHERE candidato_id = 1 AND desbloqueavel_id 
 #  UPDATE candidato SET desbloqueavel_selecionado = {desbloqueavel_id} WHERE candidato_id = {self.candidato_id}
 select * from candidato;
 select * from desbloqueavel_candidato;
+use bayerchallenge;
+select * from pontuacao_level;
+delete from atividade_resolvida_candidato where 1;
 
+SELECT pontuacao_level_id FROM pontuacao_level WHERE pontuacao_maxima > (select pontuacao_alcancada from pontuacao_candidato pc INNER JOIN candidato c ON pc.pontuacao_candidato_id = c.pontuacao_candidato_id WHERE c.candidato_id = 1 ) + 100 ORDER BY pontuacao_maxima ASC LIMIT 1;
 SELECT COUNT(cv.candidato_id),(SELECT COUNT(cv2.candidato_id) from candidato_vaga cv2 WHERE cv2.vaga_id = v.vaga_id AND cv2.pontuacao_alcancada > v.pontuacao_minima ), f.descricao, v.created_at FROM vaga v INNER JOIN candidato_vaga cv ON cv.vaga_id = v.vaga_id LEFT JOIN fase f ON f.fase_id = v.fase_id
 # SELECT cd.titulo, cd.descricao, sum(ac.desafios_resolvidos), count(a.atividade_id), sum(ad.pontos) FROM categoria_desafio cd INNER JOIN candidato_vaga cv ON cv.vaga_id = cd.vaga_id  LEFT JOIN atividade_desafio ad on ad.categoria_desafio_id = cd.categoria_desafio_id LEFT JOIN atividade a ON a.atividade_desafio_id = ad.atividade_desafio_id LEFT JOIN atividade_candidato ac ON a.atividade_id = ac.atividade_id WHERE cv.candidato_id = 1 ;
