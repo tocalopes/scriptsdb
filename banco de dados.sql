@@ -162,7 +162,7 @@ CREATE TABLE `experiencia_anterior`
   `empresa` varchar(45) NOT NULL,
   `emprego_atual` tinyint(1) DEFAULT null,
   `entrada` date NOT NULL,
-  `saida` datetime DEFAULT NULL,
+  `saida` date DEFAULT NULL,
   `principais_atividades` mediumtext,
   `salario` decimal(10,2),
   `created_at` timestamp DEFAULT NOW()
@@ -195,7 +195,7 @@ CREATE TABLE pontuacao_candidato(
     `pontuacao_candidato_id` INT PRIMARY KEY AUTO_INCREMENT,
     `pontuacao_alcancada` INT NOT NULL DEFAULT 0,
     `pontuacao_level_id` INT NOT NULL
-)
+);
 
 CREATE TABLE pontuacao_level (
   `pontuacao_level_id`  INT PRIMARY KEY AUTO_INCREMENT,
@@ -216,7 +216,7 @@ CREATE TABLE vaga (
     `pontuacao_minima` int,
     `fase_id` int,
     `created_at` timestamp DEFAULT NOW()
-)
+);
 
 CREATE TABLE candidato_vaga(
     `candidato_id` int,
@@ -231,7 +231,7 @@ CREATE TABLE categoria_desafio(
     `titulo` VARCHAR(50),
     `descricao` VARCHAR(255),
     `vaga_id` INT
-)
+);
 
 CREATE TABLE atividade_desafio(
     `atividade_desafio_id` INT PRIMARY KEY AUTO_INCREMENT,
@@ -240,7 +240,7 @@ CREATE TABLE atividade_desafio(
     `titulo` VARCHAR(50),
     `descricao` VARCHAR(255),
     `minutos_necessarios` INT
-)
+);
 
 CREATE TABLE atividade_resolvida_candidato(
     `atividade_id` INT,
@@ -388,7 +388,7 @@ CREATE TABLE desbloqueavel_candidato(
     INSERT INTO categoria_desafio (titulo, descricao, vaga_id) VALUES ("Conhecimentos Específicos","Conhecimentos necessários para sua vaga",1);
      INSERT INTO atividade_desafio (categoria_desafio_id, pontos, minutos_necessarios, titulo,descricao) VALUES (1,100,30,"Ética", "desenvolvimento e capacidade de atuação portando-se de uma conduta ética.");
      INSERT INTO atividade_desafio (categoria_desafio_id, pontos, minutos_necessarios, titulo,descricao) VALUES (1,250,40,"Liderança", "Técnicas de liderança em ambientes de extrema diversibilidade.");
-    INSERT INTO atividade_desafio (categoria_desafio_id, pontos, minutos_necessarios, titulo,descricao) VALUES (1,250,40,"Javascript", "Conhecimentos avançados da linguagem e desenvolvimento com frameworks modernos.");
+    INSERT INTO atividade_desafio (categoria_desafio_id, pontos, minutos_necessarios, titulo,descricao) VALUES (2,250,40,"Javascript", "Conhecimentos avançados da linguagem e desenvolvimento com frameworks modernos.");
 
 # #
   INSERT INTO atividade (titulo, descricao, atividade_desafio_id) VALUES ("Arrow Function", "Qual é uma de suas finalidades?",3);
@@ -402,22 +402,20 @@ INSERT INTO atividade (titulo, descricao, atividade_desafio_id) VALUES ("Moral",
 INSERT INTO atividade (titulo, descricao, atividade_desafio_id) VALUES ("Promise", "Qual é uma de suas finalidades?",3);#
 #
 
-INSERT INTO  resposta_atividade (atividade_id, resposta) VALUES (1,"Possuir um contexto léxico");
+INSERT INTO  resposta_atividade (atividade_id, resposta,correta) VALUES (1,"Possuir um contexto léxico",1);
 INSERT INTO  resposta_atividade (atividade_id, resposta) VALUES (1,"Resolver problemas como Callback Hell");
 INSERT INTO  resposta_atividade (atividade_id, resposta) VALUES (1,"Lidar com requisições assíncronas");
 
 
 INSERT INTO  resposta_atividade (atividade_id, resposta) VALUES (2,"Forçar até eles conseguirem prozuir mais");
-INSERT INTO  resposta_atividade (atividade_id, resposta) VALUES (2,"Permitir um tempo de descanço");
+INSERT INTO  resposta_atividade (atividade_id, resposta,correta) VALUES (2,"Permitir um tempo de descanço",1);
 INSERT INTO  resposta_atividade (atividade_id, resposta) VALUES (2,"Deixar a situação como está");
 
-INSERT INTO resposta_atividade (atividade_id, resposta) VALUES (3,"Possuír uma conduta que vá de acordo com os costumes práticas e não viole outros indivíduos");
+INSERT INTO resposta_atividade (atividade_id, resposta,correta ) VALUES (3,"Possuír uma conduta que vá de acordo com os costumes e práticas", 1);
 INSERT INTO resposta_atividade (atividade_id, resposta) VALUES (3,"Possuír uma vida com fama e riquezas");
-select * from resposta_atividade;
-delete from resposta_atividade where resposta_atividade_id between 5 and 7;
 
 INSERT INTO  resposta_atividade (atividade_id, resposta) VALUES (4,"Possuir um contexto léxico");
-INSERT INTO  resposta_atividade (atividade_id, resposta) VALUES (4,"Resolver problemas como Callback Hell");
+INSERT INTO  resposta_atividade (atividade_id, resposta,correta) VALUES (4,"Resolver problemas como Callback Hell",1);
 INSERT INTO  resposta_atividade (atividade_id, resposta) VALUES (4,"Redução de código ao lidar com funções anônimas");
 #
     SELECT * FROM resposta_atividade;
@@ -482,6 +480,8 @@ select * from desbloqueavel_candidato;
 use bayerchallenge;
 select * from pontuacao_level;
 delete from atividade_resolvida_candidato where 1;
+select * from resposta_atividade;
+select * from atividade_desafio;
 
 SELECT pontuacao_level_id FROM pontuacao_level WHERE pontuacao_maxima > (select pontuacao_alcancada from pontuacao_candidato pc INNER JOIN candidato c ON pc.pontuacao_candidato_id = c.pontuacao_candidato_id WHERE c.candidato_id = 1 ) + 100 ORDER BY pontuacao_maxima ASC LIMIT 1;
 SELECT COUNT(cv.candidato_id),(SELECT COUNT(cv2.candidato_id) from candidato_vaga cv2 WHERE cv2.vaga_id = v.vaga_id AND cv2.pontuacao_alcancada > v.pontuacao_minima ), f.descricao, v.created_at FROM vaga v INNER JOIN candidato_vaga cv ON cv.vaga_id = v.vaga_id LEFT JOIN fase f ON f.fase_id = v.fase_id
